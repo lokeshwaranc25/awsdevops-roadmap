@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>0 → AI + AWS DevOps Engineer | Pipeline Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0d12;
+  --bg-panel:#11151d;
+  --bg-card:#161b25;
+  --line:#232a38;
+  --line-soft:#1b212c;
+  --text:#dfe6f0;
+  --text-dim:#8b96a8;
+  --text-faint:#5b667a;
+  --amber:#ffb454;
+  --green:#5fd98a;
+  --green-dim:#2e7a52;
+  --red:#ff6b6b;
+  --blue:#6fb8ff;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Inter',sans-serif;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--green-dim); color:#fff;}
+
+/* ===== scanline / grid bg ===== */
+.bg-grid{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(95,217,138,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(95,217,138,0.035) 1px, transparent 1px);
+  background-size:42px 42px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+}
+
+/* ===== top status bar ===== */
+.statusbar{
+  position:sticky; top:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 24px;
+  background:rgba(10,13,18,0.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--text-faint);
+}
+.statusbar .dot{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--green); margin-right:6px; box-shadow:0 0 8px var(--green);}
+.statusbar-right{display:flex; gap:18px;}
+.statusbar-right span{color:var(--text-dim);}
+
+/* ===== sidebar nav (desktop) ===== */
+.layout{display:flex; min-height:100vh;}
+nav{
+  position:sticky; top:33px; align-self:flex-start;
+  height:calc(100vh - 33px);
+  width:230px; flex-shrink:0;
+  display:flex; flex-direction:column; gap:1px; overflow-y:auto;
+  background:var(--bg-panel);
+  border-right:1px solid var(--line);
+  padding:18px 0;
+  scrollbar-width:thin;
+}
+nav::-webkit-scrollbar{width:5px;}
+nav::-webkit-scrollbar-thumb{background:var(--line);}
+nav a{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.03em;
+  color:var(--text-faint);
+  text-decoration:none;
+  padding:10px 22px;
+  border-left:2px solid transparent;
+  white-space:nowrap;
+  transition:color .15s, border-color .15s, background .15s;
+}
+nav a:hover{color:var(--amber); background:rgba(255,180,84,0.05);}
+nav a.active{color:var(--green); border-left-color:var(--green); background:rgba(95,217,138,0.06);}
+
+main{position:relative; z-index:1; flex:1; min-width:0; max-width:1320px; margin:0 auto; padding:0 48px;}
+
+/* ===== hero ===== */
+.hero{
+  padding:90px 0 60px;
+  border-bottom:1px solid var(--line);
+  position:relative;
+}
+.hero::before{
+  content:''; position:absolute; top:-60px; left:-10%; width:60%; height:340px;
+  background:radial-gradient(ellipse at center, rgba(95,217,138,0.10), transparent 70%);
+  pointer-events:none; filter:blur(10px); z-index:-1;
+}
+.hero-eyebrow{
+  font-family:var(--mono); font-size:12.5px; color:var(--green);
+  display:flex; align-items:center; gap:10px; margin-bottom:22px;
+}
+.hero-eyebrow::before{content:'$'; color:var(--text-faint);}
+.hero-eyebrow .cursor{display:inline-block; width:8px; height:15px; background:var(--green); animation:blink 1.1s step-end infinite;}
+@keyframes blink{50%{opacity:0;}}
+.hero h1{
+  font-family:var(--sans); font-weight:800;
+  font-size:clamp(36px,4.6vw,72px);
+  line-height:1.05; letter-spacing:-0.02em;
+  width:100%; max-width:none;
+}
+.hero h1 .grad{
+  background:linear-gradient(95deg,var(--green) 0%, var(--amber) 45%, var(--blue) 90%);
+  background-size:200% auto;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:gradflow 6s ease-in-out infinite;
+}
+@keyframes gradflow{
+  0%,100%{background-position:0% center;}
+  50%{background-position:100% center;}
+}
+.hero p.sub{
+  margin-top:22px; max-width:900px; font-size:17px; color:var(--text-dim);
+}
+.hero-stats{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+  margin-top:46px; background:var(--line); border:1px solid var(--line);
+}
+.hero-stats div{background:var(--bg-panel); padding:20px 22px; position:relative; overflow:hidden; transition:background .2s;}
+.hero-stats div:hover{background:var(--bg-card);}
+.hero-stats div::after{
+  content:''; position:absolute; left:0; bottom:0; width:100%; height:2px;
+  background:linear-gradient(90deg,var(--green),var(--amber)); transform:scaleX(0); transform-origin:left;
+  transition:transform .35s ease;
+}
+.hero-stats div:hover::after{transform:scaleX(1);}
+.hero-stats .num{font-family:var(--mono); font-size:28px; font-weight:700; color:var(--green); text-shadow:0 0 18px rgba(95,217,138,0.35);}
+.hero-stats .lbl{font-size:12px; color:var(--text-faint); margin-top:4px; text-transform:uppercase; letter-spacing:.04em;}
+
+/* ===== section base ===== */
+section{padding:70px 0; border-bottom:1px solid var(--line);}
+.section-head{margin-bottom:38px;}
+.section-head .tag{font-family:var(--mono); font-size:11.5px; color:var(--amber); letter-spacing:.08em; text-transform:uppercase;}
+.section-head h2{font-size:clamp(24px,3.2vw,36px); font-weight:800; margin-top:8px; letter-spacing:-0.01em;}
+.section-head p{color:var(--text-dim); margin-top:10px; max-width:680px; font-size:15px;}
+
+/* ===== pipeline (signature element) ===== */
+.pipeline-wrap{overflow-x:auto; padding-bottom:14px;}
+.pipeline{
+  display:flex; align-items:stretch; gap:0; min-width:max-content;
+  font-family:var(--mono);
+}
+.pipe-stage{
+  display:flex; flex-direction:column; align-items:center; width:150px; flex-shrink:0; cursor:pointer;
+}
+.pipe-stage .node{
+  width:46px; height:46px; border-radius:50%; border:2px solid var(--line);
+  background:var(--bg-card); display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:700; color:var(--text-dim); transition:all .2s; position:relative; z-index:2;
+}
+.pipe-stage:hover .node{border-color:var(--green); color:var(--green); box-shadow:0 0 0 4px rgba(95,217,138,0.12);}
+.pipe-stage.active .node{border-color:var(--green); background:var(--green); color:#06140d; box-shadow:0 0 16px rgba(95,217,138,0.45);}
+.pipe-row{display:flex; align-items:center;}
+.pipe-line{height:2px; flex:1; background:var(--line); margin-top:-58px; min-width:24px;}
+.pipe-stage .lbl{font-size:10.5px; color:var(--text-faint); text-align:center; margin-top:10px; line-height:1.35; max-width:130px;}
+.pipe-stage.active .lbl{color:var(--text);}
+.pipe-stage .dur{font-size:9.5px; color:var(--amber); margin-top:3px;}
+
+/* ===== phase detail card ===== */
+.phase-detail{
+  margin-top:36px; background:var(--bg-panel); border:1px solid var(--line);
+}
+.phase-detail-top{
+  padding:24px 28px; border-bottom:1px solid var(--line);
+  display:flex; justify-content:space-between; align-items:flex-start; gap:20px; flex-wrap:wrap;
+}
+.phase-detail-top h3{font-size:21px; font-weight:800;}
+.phase-detail-top .obj{color:var(--text-dim); font-size:14px; margin-top:6px; max-width:560px;}
+.badge{font-family:var(--mono); font-size:11.5px; color:var(--green); border:1px solid var(--green-dim); padding:5px 10px; white-space:nowrap;}
+.phase-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:0;}
+.phase-col{padding:24px 28px;}
+.phase-col + .phase-col{border-left:1px solid var(--line);}
+.phase-col h4{
+  font-family:var(--mono); font-size:11px; letter-spacing:.07em; text-transform:uppercase; color:var(--amber); margin-bottom:14px;
+}
+.phase-col ul{list-style:none;}
+.phase-col li{
+  font-size:13.8px; color:var(--text-dim); padding:6px 0 6px 18px; position:relative; border-bottom:1px dashed var(--line-soft);
+}
+.phase-col li:last-child{border-bottom:none;}
+.phase-col li::before{content:'›'; position:absolute; left:0; color:var(--green);}
+.day-split{display:flex; gap:10px; margin-bottom:16px;}
+.day-pill{flex:1; background:var(--bg-card); border:1px solid var(--line); padding:10px 12px; font-size:12px;}
+.day-pill b{display:block; color:var(--green); font-family:var(--mono); font-size:11px; margin-bottom:3px;}
+.mistake-box{margin-top:16px; padding:12px 14px; background:rgba(255,107,107,0.06); border-left:2px solid var(--red); font-size:13px; color:#e8a9a9;}
+.exit-box{margin-top:16px; padding:12px 14px; background:rgba(95,217,138,0.06); border-left:2px solid var(--green); font-size:13px; color:#aee8c5;}
+.phase-full-bottom{padding:20px 28px; border-top:1px solid var(--line); display:flex; gap:28px; flex-wrap:wrap;}
+.res-group{font-size:13px;}
+.res-group b{font-family:var(--mono); color:var(--blue); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;}
+.res-group span{color:var(--text-dim); display:block; margin-bottom:2px;}
+
+/* ===== aws/devops chip grid ===== */
+.chip-grid{display:flex; flex-wrap:wrap; gap:8px;}
+.chip{
+  font-family:var(--mono); font-size:12px; padding:7px 12px;
+  border:1px solid var(--line); background:var(--bg-card); color:var(--text-dim);
+  transition:all .15s;
+}
+.chip:hover{border-color:var(--amber); color:var(--amber);}
+
+/* ===== project tiers ===== */
+.tier-tabs{display:flex; gap:1px; margin-bottom:0; background:var(--line); border:1px solid var(--line);}
+.tier-tab{
+  flex:1; text-align:center; padding:13px; background:var(--bg-panel); font-family:var(--mono); font-size:12px;
+  color:var(--text-faint); cursor:pointer; letter-spacing:.03em;
+}
+.tier-tab.active{background:var(--bg-card); color:var(--green);}
+.tier-panel{display:none; border:1px solid var(--line); border-top:none;}
+.tier-panel.active{display:block;}
+.proj-table{width:100%; border-collapse:collapse; font-size:13px;}
+.proj-table th{
+  text-align:left; font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.05em;
+  color:var(--text-faint); padding:12px 16px; border-bottom:1px solid var(--line); background:var(--bg-panel);
+}
+.proj-table td{padding:13px 16px; border-bottom:1px solid var(--line-soft); color:var(--text-dim); vertical-align:top;}
+.proj-table tr:hover td{background:rgba(255,255,255,0.015); color:var(--text);}
+.proj-table .pname{color:var(--text); font-weight:600;}
+.proj-table .svc{font-family:var(--mono); font-size:11px; color:var(--blue);}
+.proj-table th:last-child, .proj-table td:last-child{max-width:280px;}
+
+/* ===== cert timeline ===== */
+.cert-card{
+  display:grid; grid-template-columns:60px 1fr; gap:0; margin-bottom:1px; border:1px solid var(--line); background:var(--bg-panel);
+}
+.cert-num{
+  background:var(--bg-card); display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:20px; font-weight:800; color:var(--amber); border-right:1px solid var(--line);
+}
+.cert-body{padding:20px 24px;}
+.cert-body h4{font-size:16px; font-weight:700;}
+.cert-body .meta{font-family:var(--mono); font-size:11.5px; color:var(--green); margin-top:4px;}
+.cert-body p{font-size:13.5px; color:var(--text-dim); margin-top:10px;}
+.cert-checklist{margin-top:12px; display:flex; gap:18px; flex-wrap:wrap;}
+.cert-checklist span{font-size:12.5px; color:var(--text-faint); font-family:var(--mono);}
+.cert-checklist span::before{content:'✓ '; color:var(--green);}
+
+/* ===== month calendar ===== */
+.cal-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line);}
+.cal-cell{background:var(--bg-panel); padding:18px 20px;}
+.cal-cell .m{font-family:var(--mono); font-size:11px; color:var(--amber); text-transform:uppercase; letter-spacing:.05em;}
+.cal-cell h5{font-size:15px; margin-top:6px; font-weight:700;}
+.cal-cell p{font-size:12.5px; color:var(--text-dim); margin-top:8px;}
+
+/* ===== planner table ===== */
+.planner{width:100%; border-collapse:collapse; font-size:13px; margin-top:10px;}
+.planner th{background:var(--bg-panel); font-family:var(--mono); font-size:10.5px; text-transform:uppercase; color:var(--text-faint); padding:10px 14px; border:1px solid var(--line); text-align:left;}
+.planner td{padding:10px 14px; border:1px solid var(--line-soft); color:var(--text-dim);}
+
+/* ===== two-col list section ===== */
+.twocol{display:grid; grid-template-columns:1fr 1fr; gap:32px;}
+.simple-list{list-style:none;}
+.simple-list li{padding:9px 0; border-bottom:1px solid var(--line-soft); font-size:14px; color:var(--text-dim); padding-left:20px; position:relative;}
+.simple-list li::before{content:'—'; position:absolute; left:0; color:var(--text-faint);}
+.simple-list.good li::before{content:'✓'; color:var(--green);}
+.simple-list.bad li::before{content:'✕'; color:var(--red);}
+
+/* ===== salary table ===== */
+.sal-table{width:100%; border-collapse:collapse; font-size:13.5px;}
+.sal-table th{font-family:var(--mono); font-size:10.5px; text-transform:uppercase; color:var(--text-faint); text-align:left; padding:12px 16px; border-bottom:1px solid var(--line);}
+.sal-table td{padding:13px 16px; border-bottom:1px solid var(--line-soft); color:var(--text-dim);}
+.sal-table .lvl{color:var(--text); font-weight:600;}
+.sal-table .pay{font-family:var(--mono); color:var(--green);}
+
+/* ===== tracker checklist widget ===== */
+.tracker-box{border:1px solid var(--line); background:var(--bg-panel); padding:22px 24px;}
+.tracker-box h4{font-family:var(--mono); font-size:12px; color:var(--blue); text-transform:uppercase; margin-bottom:14px;}
+.track-item{display:flex; align-items:center; gap:10px; padding:7px 0; font-size:13.5px; color:var(--text-dim); cursor:pointer;}
+.track-item input{accent-color:var(--green); width:15px; height:15px; cursor:pointer;}
+.track-item.done span{color:var(--text-faint); text-decoration:line-through;}
+.progress-bar{height:5px; background:var(--bg-card); margin-top:14px; overflow:hidden; border:1px solid var(--line);}
+.progress-fill{height:100%; background:var(--green); width:0%; transition:width .3s;}
+.progress-label{font-family:var(--mono); font-size:11px; color:var(--text-faint); margin-top:6px;}
+.tracker-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px;}
+
+footer{padding:50px 24px 80px; text-align:center;}
+footer p{font-family:var(--mono); font-size:12px; color:var(--text-faint);}
+footer .cursor2{display:inline-block; width:7px; height:13px; background:var(--green); margin-left:4px; animation:blink 1.1s step-end infinite; vertical-align:middle;}
+
+@media(max-width:760px){
+  .phase-grid{grid-template-columns:1fr;}
+  .phase-col + .phase-col{border-left:none; border-top:1px solid var(--line);}
+  .twocol{grid-template-columns:1fr;}
+  .hero-stats{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<div class="statusbar">
+  <div><span class="dot"></span>build: passing</div>
+  <div class="statusbar-right">
+    <span>track: fresher → ai-aws-devops-engineer</span>
+    <span id="clockstatus">duration: 10–12 months</span>
+  </div>
+</div>
+
+<div class="layout">
+<nav id="mainnav">
+  <a href="#hero" class="active">~/home</a>
+  <a href="#timeline">timeline</a>
+  <a href="#phases">phases</a>
+  <a href="#aws">aws-stack</a>
+  <a href="#ai">ai-stack</a>
+  <a href="#devops">devops-stack</a>
+  <a href="#projects">projects</a>
+  <a href="#certs">certifications</a>
+  <a href="#calendar">calendar</a>
+  <a href="#planner">planner</a>
+  <a href="#interview">interview</a>
+  <a href="#jobsearch">job-search</a>
+  <a href="#salary">salary</a>
+  <a href="#habits">habits</a>
+  <a href="#trackers">trackers</a>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="hero" style="border-top:none;">
+    <div class="hero-eyebrow">init roadmap.sh --role="ai-aws-devops-engineer" --level=fresher<span class="cursor"></span></div>
+    <h1><span class="grad">AI + AWS DevOps</span><br>Zero to job-ready.</h1>
+    <p class="sub">A 17-phase, 5-hour-a-day curriculum — 3 hours of structured theory, 2 hours of hands-on labs — that takes a complete beginner through Linux, Python, AWS, Docker, Kubernetes, CI/CD, IaC, observability, security, MLOps/LLMOps with SageMaker & Bedrock, AI-assisted DevOps tooling, 39 free-tier-friendly portfolio projects, and a 6-certification ladder (including AWS Certified AI Practitioner), ending in a 12-month job-search plan.</p>
+    <div class="hero-stats">
+      <div><div class="num">17</div><div class="lbl">Phases</div></div>
+      <div><div class="num">39</div><div class="lbl">Projects</div></div>
+      <div><div class="num">6</div><div class="lbl">AWS Certs</div></div>
+      <div><div class="num">5h</div><div class="lbl">Daily commit</div></div>
+    </div>
+  </section>
+
+  <!-- TIMELINE / PIPELINE -->
+  <section id="timeline">
+    <div class="section-head">
+      <div class="tag">01 · the pipeline</div>
+      <h2>Your build pipeline, stage by stage</h2>
+      <p>Click any stage to jump into its full breakdown — objective, daily split, labs, mistakes, and exit criteria. Total runtime: <strong style="color:var(--text)">~48 weeks (10–12 months)</strong> at 5 focused hours/day, including 4 buffer/revision weeks for burnout prevention. AI tooling and MLOps are woven through every phase, not bolted on at the end.</p>
+    </div>
+    <div class="pipeline-wrap">
+      <div class="pipeline" id="pipelineRail"></div>
+    </div>
+
+    <div style="margin-top:34px; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line);">
+      <div style="background:var(--bg-panel); padding:18px 20px;"><div style="font-family:var(--mono); font-size:11px; color:var(--amber); text-transform:uppercase;">Daily schedule</div><div style="font-size:13.5px; color:var(--text-dim); margin-top:8px;">06:30–09:30 → 3h theory (docs, video, notes)<br>19:00–21:00 → 2h hands-on labs<br>21:00–21:15 → log + commit to GitHub</div></div>
+      <div style="background:var(--bg-panel); padding:18px 20px;"><div style="font-family:var(--mono); font-size:11px; color:var(--amber); text-transform:uppercase;">Weekly rhythm</div><div style="font-size:13.5px; color:var(--text-dim); margin-top:8px;">Mon–Fri → new topics + labs<br>Saturday → mini-project / integration<br>Sunday → revision + weekly self-test + rest by evening</div></div>
+      <div style="background:var(--bg-panel); padding:18px 20px;"><div style="font-family:var(--mono); font-size:11px; color:var(--amber); text-transform:uppercase;">Burnout prevention</div><div style="font-size:13.5px; color:var(--text-dim); margin-top:8px;">1 full rest day/week (no screens after 9pm)<br>Buffer week after every 3 phases<br>Hard cap: 5h/day — no all-nighters</div></div>
+      <div style="background:var(--bg-panel); padding:18px 20px;"><div style="font-family:var(--mono); font-size:11px; color:var(--amber); text-transform:uppercase;">Review cadence</div><div style="font-size:13.5px; color:var(--text-dim); margin-top:8px;">Weekly self-assessment quiz<br>Monthly milestone demo (record a 5-min video)<br>Phase exit-criteria gate before moving on</div></div>
+    </div>
+  </section>
+
+  <!-- PHASES DETAIL -->
+  <section id="phases">
+    <div class="section-head">
+      <div class="tag">02 · phase detail</div>
+      <h2>Every phase, fully specified</h2>
+      <p>Objective, duration, daily breakdown, topics in order, labs, mini-projects, mistakes to avoid, weekly assessment, and the exit criteria that unlocks the next phase.</p>
+    </div>
+    <div class="phase-detail" id="phaseDetailMount"></div>
+  </section>
+
+  <!-- AWS STACK -->
+  <section id="aws">
+    <div class="section-head">
+      <div class="tag">03 · service coverage</div>
+      <h2>AWS services you must master</h2>
+      <p>Every service below is taught hands-on inside Phases 3, 5–9, and 11 — never as a slide, always as a lab.</p>
+    </div>
+    <div class="chip-grid" id="awsChips"></div>
+  </section>
+
+  <!-- AI STACK -->
+  <section id="ai">
+    <div class="section-head">
+      <div class="tag">03b · ai + mlops</div>
+      <h2>AI services & MLOps tooling</h2>
+      <p>The "AI" half of the role: generative AI services, model deployment, LLMOps pipelines, and AI-assisted engineering — taught in Phase 6b and reinforced in Phases 9, 11–12.</p>
+    </div>
+    <div class="chip-grid" id="aiChips"></div>
+  </section>
+
+  <!-- DEVOPS STACK -->
+  <section id="devops">
+    <div class="section-head">
+      <div class="tag">04 · tooling coverage</div>
+      <h2>The DevOps toolchain</h2>
+      <p>The non-AWS engineering core — Linux through incident management — woven through Phases 1, 2, 5–10.</p>
+    </div>
+    <div class="chip-grid" id="devopsChips"></div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-head">
+      <div class="tag">05 · portfolio</div>
+      <h2>38 projects: beginner → production</h2>
+      <p>11 beginner, 11 intermediate, 11 advanced, and 6 production-grade capstones — every single one designed to run inside the AWS Free Tier or for a few dollars of credit, with cost-saving substitutions called out explicitly. Each ships as its own GitHub repo: <code style="color:var(--blue); font-family:var(--mono); font-size:12.5px;">README → architecture diagram → IaC → CI/CD → screenshots → teardown script</code>.</p>
+    </div>
+    <div style="border:1px solid var(--green-dim); background:rgba(95,217,138,0.05); padding:18px 22px; margin-bottom:28px;">
+      <div style="font-family:var(--mono); font-size:11px; color:var(--green); text-transform:uppercase; letter-spacing:.05em; margin-bottom:10px;">Free-tier survival rules (apply to every project below)</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; font-size:13px; color:var(--text-dim);">
+        <div>① Always use <strong style="color:var(--text)">t2.micro / t3.micro</strong> (750 free hrs/mo, 12 months) — never a bigger instance for labs.</div>
+        <div>② <strong style="color:var(--text)">Skip EKS</strong> ($0.10/hr control plane, no free tier) — use <strong style="color:var(--text)">k3s or kind</strong> on one free EC2 instead.</div>
+        <div>③ <strong style="color:var(--text)">Skip NAT Gateway</strong> (~$0.045/hr) — use public subnets or a NAT instance for learning labs.</div>
+        <div>④ <strong style="color:var(--text)">Skip managed OpenSearch</strong> (no free tier) — self-host FAISS/Chroma for vector search.</div>
+        <div>⑤ RDS: <strong style="color:var(--text)">single-AZ db.t3.micro</strong> only, 20GB — never Multi-AZ in a lab.</div>
+        <div>⑥ Set a <strong style="color:var(--text)">$5 and $20 AWS Budget alert</strong> day one, and run <code style="color:var(--blue);">terraform destroy</code> / stop instances every night.</div>
+      </div>
+    </div>
+    <div class="tier-tabs" id="tierTabs"></div>
+    <div id="tierPanels"></div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certs">
+    <div class="section-head">
+      <div class="tag">06 · certification ladder</div>
+      <h2>The 6-certification sequence</h2>
+      <p>Stack the exams on top of the hands-on work instead of studying for them cold — by the time you sit each exam, you've already built the labs it tests.</p>
+    </div>
+    <div id="certMount"></div>
+  </section>
+
+  <!-- CALENDAR -->
+  <section id="calendar">
+    <div class="section-head">
+      <div class="tag">07 · month-by-month</div>
+      <h2>11-month calendar view</h2>
+    </div>
+    <div class="cal-grid" id="calMount"></div>
+  </section>
+
+  <!-- PLANNER -->
+  <section id="planner">
+    <div class="section-head">
+      <div class="tag">08 · weekly planner</div>
+      <h2>A representative week (Phase 5 — Docker)</h2>
+      <p>Use this template every week: swap topics, keep the rhythm.</p>
+    </div>
+    <table class="planner">
+      <tr><th>Day</th><th>06:30–09:30 (theory)</th><th>19:00–21:00 (hands-on)</th><th>Output</th></tr>
+      <tr><td>Mon</td><td>Docker architecture, images vs containers</td><td>Install Docker, run first containers</td><td>3 containers running, notes pushed</td></tr>
+      <tr><td>Tue</td><td>Dockerfile syntax, layers, caching</td><td>Write Dockerfile for a Flask app</td><td>Custom image built & pushed to Docker Hub</td></tr>
+      <tr><td>Wed</td><td>Multi-stage builds, image optimization</td><td>Shrink image from 900MB → &lt;150MB</td><td>Optimized image + before/after writeup</td></tr>
+      <tr><td>Thu</td><td>Docker networking & volumes</td><td>Multi-container app with custom network</td><td>2 services communicating</td></tr>
+      <tr><td>Fri</td><td>Docker Compose deep dive</td><td>Compose file for app + DB + nginx</td><td>docker-compose up working stack</td></tr>
+      <tr><td>Sat</td><td colspan="2">Mini-project: containerize a 3-tier app end-to-end, push to ECR</td><td>Repo + README + architecture diagram</td></tr>
+      <tr><td>Sun</td><td colspan="2">Revision + weekly quiz (15 Q) + rest</td><td>Quiz score logged in tracker</td></tr>
+    </table>
+  </section>
+
+  <!-- INTERVIEW -->
+  <section id="interview">
+    <div class="section-head">
+      <div class="tag">09 · interview prep</div>
+      <h2>Phase 13: Interview readiness</h2>
+      <p>Runs in parallel with Phases 11–12 once projects exist to talk about.</p>
+    </div>
+    <div class="twocol">
+      <div>
+        <h4 style="font-family:var(--mono); font-size:12px; color:var(--blue); text-transform:uppercase; margin-bottom:12px;">Core question categories</h4>
+        <ul class="simple-list">
+          <li>Linux & scripting: process management, file permissions, cron, sed/awk one-liners</li>
+          <li>AWS scenario design: "design a highly available 3-tier app", "reduce S3 cost by 40%"</li>
+          <li>CI/CD: blue-green vs canary, rollback strategy, pipeline failure debugging</li>
+          <li>Kubernetes: pod scheduling, readiness vs liveness probes, debugging CrashLoopBackOff</li>
+          <li>AI/MLOps: Bedrock vs SageMaker, RAG vs fine-tuning, deploying and rolling back model endpoints</li>
+          <li>IaC: Terraform state locking, drift detection, module design</li>
+          <li>Incident response: "prod is down, walk me through your first 10 minutes"</li>
+          <li>Behavioral (STAR): conflict, ownership, learning from failure</li>
+          <li>System design: design a CI/CD platform, design a logging pipeline at scale</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-family:var(--mono); font-size:12px; color:var(--blue); text-transform:uppercase; margin-bottom:12px;">Mock interview cadence</h4>
+        <ul class="simple-list good">
+          <li>Week 1–2 of Phase 13: record yourself answering 20 common questions, review tone & filler words</li>
+          <li>Week 3: 2 peer mock interviews (Pramp / community Discords)</li>
+          <li>Week 4: 1 technical whiteboard-style system design mock</li>
+          <li>Ongoing: keep an "interview log" — every real interview's questions get added back into your prep bank</li>
+          <li>HR round prep: salary research, "why this company", relocation/notice period answers ready</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOB SEARCH -->
+  <section id="jobsearch">
+    <div class="section-head">
+      <div class="tag">10 · job search</div>
+      <h2>Phase 15: Getting hired</h2>
+    </div>
+    <div class="twocol">
+      <div>
+        <h4 style="font-family:var(--mono); font-size:12px; color:var(--blue); text-transform:uppercase; margin-bottom:12px;">Resume & presence</h4>
+        <ul class="simple-list">
+          <li>One-page ATS-safe resume: no tables/graphics, standard headers, quantified bullets ("cut deploy time 65%, 12min → 4min")</li>
+          <li>LinkedIn: headline = role + 3 keywords, banner with tech stack, weekly post about a project</li>
+          <li>GitHub: pinned repos = 5 best projects, every repo has a real README with architecture diagram</li>
+          <li>Portfolio site: one page, links to all 6 capstones, deployed on your own AWS account (proof of skill)</li>
+          <li>Apply in batches: 10 tailored applications/day beats 50 generic ones</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-family:var(--mono); font-size:12px; color:var(--blue); text-transform:uppercase; margin-bottom:12px;">Outreach strategy</h4>
+        <ul class="simple-list good">
+          <li>Target 3 tiers: startups (faster hiring), mid-size product companies, service/consulting firms</li>
+          <li>Message hiring managers directly with a 3-line note + 1 project link, not a resume dump</li>
+          <li>Contribute to one open-source DevOps tool — visible commits matter more than a cert alone</li>
+          <li>Track every application in the tracker below: status, recruiter, next action date</li>
+          <li>Negotiate: always get 2+ offers in flight before accepting one</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SALARY -->
+  <section id="salary">
+    <div class="section-head">
+      <div class="tag">11 · compensation</div>
+      <h2>Salary progression roadmap (India, approx. ranges)</h2>
+      <p>Directional, not contractual — varies by city, company tier, and negotiation. Use as a planning anchor.</p>
+    </div>
+    <table class="sal-table">
+      <tr><th>Level</th><th>Experience</th><th>Typical CTC range</th><th>What unlocks it</th></tr>
+      <tr><td class="lvl">Fresher / Jr DevOps</td><td>0–1 yr</td><td class="pay">₹4–8 LPA</td><td>2–3 certs + 5 solid GitHub projects</td></tr>
+      <tr><td class="lvl">DevOps Engineer</td><td>1–3 yrs</td><td class="pay">₹8–16 LPA</td><td>Production K8s + IaC + on-call experience</td></tr>
+      <tr><td class="lvl">Senior DevOps Engineer</td><td>3–6 yrs</td><td class="pay">₹16–30 LPA</td><td>Architecture ownership, cost optimization wins</td></tr>
+      <tr><td class="lvl">DevOps / Platform Lead</td><td>6–9 yrs</td><td class="pay">₹28–45 LPA</td><td>Multi-team platform strategy, security posture</td></tr>
+      <tr><td class="lvl">Principal / Staff</td><td>9+ yrs</td><td class="pay">₹45 LPA+</td><td>Org-wide standards, mentoring, vendor strategy</td></tr>
+    </table>
+  </section>
+
+  <!-- HABITS -->
+  <section id="habits">
+    <div class="section-head">
+      <div class="tag">12 · sustain it</div>
+      <h2>Habits, AI tools, and mistakes to avoid</h2>
+    </div>
+    <div class="twocol">
+      <div>
+        <h4 style="font-family:var(--mono); font-size:12px; color:var(--blue); text-transform:uppercase; margin-bottom:12px;">Daily & professional habits</h4>
+        <ul class="simple-list good">
+          <li>Commit to GitHub every single day — even a 3-line README update counts</li>
+          <li>Write a one-paragraph "what I learned" log daily — becomes interview material later</li>
+          <li>Read one AWS "What's New" post per day to track service evolution</li>
+          <li>Destroy every lab resource (terraform destroy) before sleeping — cost discipline is a real skill</li>
+          <li>Document incidents like a real engineer: timeline, root cause, fix, prevention</li>
+        </ul>
+        <h4 style="font-family:var(--mono); font-size:12px; color:var(--blue); text-transform:uppercase; margin:22px 0 12px;">AI tools for productivity</h4>
+        <ul class="simple-list">
+          <li>Claude / ChatGPT — explain errors, review Terraform/YAML, draft READMEs</li>
+          <li>GitHub Copilot — boilerplate scripts and pipeline YAML scaffolding</li>
+          <li>AWS Q Developer — in-console troubleshooting and IaC suggestions</li>
+          <li>Amazon Bedrock / SageMaker — the AI services you'll deploy, not just use as a coding aid</li>
+          <li>Notion AI / Obsidian — structure your daily learning log automatically</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-family:var(--mono); font-size:12px; color:var(--blue); text-transform:uppercase; margin-bottom:12px;">Mistakes to avoid</h4>
+        <ul class="simple-list bad">
+          <li>Tutorial-hopping without finishing a single project end-to-end</li>
+          <li>Skipping Linux/networking fundamentals to "rush" to AWS</li>
+          <li>Leaving AWS resources running — surprise bills kill motivation</li>
+          <li>Collecting certs with zero hands-on labs behind them</li>
+          <li>Copy-pasting Terraform/Jenkinsfiles without understanding every line</li>
+          <li>Ignoring cost optimization and security until "later"</li>
+          <li>Studying 10 hours one day, zero the next 3 — consistency beats intensity</li>
+          <li>Applying to jobs only after feeling "100% ready" — start at 70%</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRACKERS -->
+  <section id="trackers" style="border-bottom:none;">
+    <div class="section-head">
+      <div class="tag">13 · live trackers</div>
+      <h2>Track your run</h2>
+      <p>Local to this page only — check items off as you complete them.</p>
+    </div>
+    <div class="tracker-grid" id="trackerMount"></div>
+  </section>
+
+</main>
+</div>
+
+<footer>
+  <p>roadmap.sh exit 0 — built for one fresher, one pipeline, one offer letter<span class="cursor2"></span></p>
+</footer>
+
+<script>
+/* ============ DATA ============ */
+const phases = [
+[
+"00","Foundation & Setup","1 week","Get your machine, accounts, and study system production-ready before touching a single AWS service.",
+["Create AWS account + enable MFA + set billing alarms ($5/$20/$50)","Install VS Code, Git Bash/Terminal, set up SSH keys","Create GitHub account, set up daily-commit habit","Set up Notion/Obsidian learning log + this roadmap as your tracker","Understand cloud computing basics: IaaS/PaaS/SaaS, regions & AZs"],
+["Account fully configured with budget alerts","A documented, repeatable daily 5-hour study block","Comfort navigating AWS Console + AWS CLI install"],
+[["Day 1-2","AWS account, IAM root lockdown, billing alarms"],["Day 3-4","Git basics, GitHub repo for 'devops-roadmap-log'"],["Day 5-7","Cloud concepts, AWS CLI setup, first console tour"]],
+"Create a 'devops-roadmap-log' GitHub repo and commit your study plan as the first README.",
+"Setting up billing alerts and forgetting to lock the root account behind MFA.",
+"You can launch an EC2 instance from the console and CLI, and you have zero unprotected root access.",
+{free:"AWS Free Tier docs, AWS Skill Builder (free tier)", paid:"—", yt:"freeCodeCamp 'AWS Cloud Practitioner Essentials'", plat:"AWS Console, GitHub"}
+],
+[
+"01","Linux + Networking + Git","3 weeks","Build the unshakeable command-line and networking base every AWS/DevOps task sits on top of.",
+["Linux file system, permissions (chmod/chown), users & groups","Process management: ps, top, kill, systemd basics","Shell scripting: variables, loops, conditionals, functions","Networking: OSI model, TCP/IP, DNS, subnetting, ports, firewalls","SSH, SCP, cron jobs, log files (/var/log)","Git: branching, merging, rebasing, conflict resolution","GitHub: PRs, issues, GitHub Actions intro"],
+["Write a bash script without looking anything up","Read a routing table and subnet mask and explain it","Resolve a merge conflict confidently"],
+[["Wk1 Mon-Fri","Linux fundamentals + file permissions + processes"],["Wk1 Sat-Sun","Shell scripting mini-project: server health-check script"],["Wk2","Networking deep dive: DNS, subnetting, firewalls, SSH"],["Wk3","Git/GitHub mastery + 5 practice repos with PR workflow"]],
+"Build a bash script that monitors disk/CPU/memory and emails an alert; publish a Git branching-strategy cheat-sheet repo.",
+"Memorizing commands without understanding what they actually do under the hood; ignoring networking as 'not real DevOps'.",
+"You can SSH into a remote Linux box, troubleshoot a network issue, and manage a Git repo with branches/PRs without hesitation.",
+{free:"freeCodeCamp Linux course, KodeKloud Linux labs, Git docs", paid:"Udemy 'Linux for DevOps'", yt:"TechWorld with Nana (Git), NetworkChuck (networking)", plat:"KillerCoda, Katacoda-style sandboxes, GitHub"}
+],
+[
+"02","Python + Automation","3 weeks","Learn just enough Python to automate AWS tasks, parse logs, and write Lambda functions.",
+["Python syntax, data structures, functions, OOP basics","File I/O, JSON/YAML parsing, error handling","Virtual environments & pip","boto3 (AWS SDK for Python) — core operations","Writing automation scripts: EC2 start/stop, S3 cleanup","Intro to REST APIs and requests library"],
+["Write a boto3 script to manage AWS resources end-to-end","Parse and transform JSON/YAML config files programmatically"],
+[["Wk1","Python core syntax, functions, OOP, error handling"],["Wk2","File/JSON/YAML handling + virtual envs + requests"],["Wk3","boto3 deep dive: EC2, S3, IAM automation scripts"]],
+"Build a Python script that auto-stops EC2 instances after hours and emails a cost report via SNS.",
+"Learning Python in isolation from AWS instead of immediately applying it with boto3.",
+"You can write a boto3 script from scratch to provision, tag, and tear down basic AWS resources.",
+{free:"freeCodeCamp Python, AWS boto3 docs", paid:"Udemy 'Python for AWS Automation'", yt:"Corey Schafer (Python), TechWorld with Nana", plat:"AWS Cloud9 / local Python + LocalStack for safe testing"}
+],
+[
+"03","AWS Core Cloud","4 weeks","Master the foundational AWS services that every architecture is built on.",
+["IAM: users, roles, policies, least privilege","EC2: instance types, AMIs, security groups, key pairs","VPC: subnets, route tables, IGW/NAT, peering","S3: buckets, versioning, lifecycle, static hosting","Route53: hosted zones, routing policies","ELB (ALB/NLB) + Auto Scaling Groups","RDS & DynamoDB basics","CloudWatch: metrics, alarms, logs","Cost Optimization: Trusted Advisor, Cost Explorer, tagging"],
+["Design and deploy a custom VPC with public/private subnets from scratch","Host a highly available web app behind an ALB with auto scaling"],
+[["Wk1","IAM + EC2 deep dive + security groups"],["Wk2","VPC architecture: subnets, routing, NAT, peering"],["Wk3","S3, Route53, CloudFront fundamentals"],["Wk4","RDS/DynamoDB + ELB + ASG + CloudWatch + cost optimization"]],
+"Deploy a 3-tier web app (web/app/DB) across 2 AZs in a custom VPC with an ALB and Auto Scaling Group; static site on S3+CloudFront+Route53.",
+"Using the default VPC for everything; over-permissioning IAM roles with AdministratorAccess 'just to make it work'.",
+"You can architect and deploy a multi-AZ, auto-scaling web application from a blank AWS account using only documentation.",
+{free:"AWS Skill Builder, AWS Well-Architected docs", paid:"LearnCantrill SAA-C03 course, Udemy Stephane Maarek courses", yt:"freeCodeCamp AWS, TechWorld with Nana", plat:"AWS Free Tier, Tutorials Dojo practice labs"}
+],
+[
+"04","DevOps Fundamentals","1.5 weeks","Understand DevOps culture, the SDLC, and where every tool fits before learning the tools themselves.",
+["DevOps culture: CALMS framework, DevOps vs SRE vs Platform Eng","SDLC models: Waterfall vs Agile vs Scrum/Kanban","12-Factor App principles","Version control workflows: GitFlow, trunk-based dev","Intro to CI/CD concept (build → test → deploy)"],
+["Explain the full software delivery lifecycle end-to-end in your own words","Map a real project onto the 12-Factor App principles"],
+[["Day 1-3","DevOps culture, CALMS, Agile/Scrum basics"],["Day 4-6","12-Factor app, GitFlow vs trunk-based dev"],["Day 7-9","CI/CD concepts overview, tool landscape mapping"]],
+"Write a short design doc mapping an existing personal project onto 12-Factor principles and a GitFlow branching model.",
+"Treating this phase as 'soft skills filler' and rushing through it — culture mistakes cause more outages than tooling mistakes.",
+"You can explain why DevOps exists, not just what tools it uses, in a 2-minute elevator pitch.",
+{free:"Atlassian Agile docs, 12factor.net, roadmap.sh DevOps", paid:"—", yt:"TechWorld with Nana 'DevOps Roadmap'", plat:"—"}
+],
+[
+"05","Containers + Docker","2.5 weeks","Go from zero to confidently containerizing and shipping any application.",
+["Containers vs VMs, Docker architecture","Images, layers, Dockerfile best practices","Multi-stage builds & image optimization","Docker networking, volumes, bind mounts","Docker Compose for multi-container apps","Docker security basics: non-root users, image scanning","Pushing images to Docker Hub & Amazon ECR"],
+["Write an optimized multi-stage Dockerfile under 150MB for a real app","Run a multi-service app via Docker Compose with persistent volumes"],
+[["Wk1","Docker fundamentals, Dockerfile, image layers"],["Wk2","Multi-stage builds, networking, volumes, Compose"],["Wk2.5","ECR push/pull, image scanning, security hardening"]],
+"Containerize a 3-tier app (frontend+backend+DB) with Docker Compose, push images to ECR, write a teardown script.",
+"Running containers as root; not using .dockerignore; baking secrets into images.",
+"You can take any app and containerize, optimize, and ship it to ECR without referencing a tutorial.",
+{free:"Docker official docs, KodeKloud Docker labs", paid:"Udemy 'Docker & Kubernetes' (Stephen Grider)", yt:"TechWorld with Nana 'Docker Tutorial'", plat:"Play with Docker, KodeKloud"}
+],
+[
+"06","Kubernetes + EKS","4 weeks","Master container orchestration on Kubernetes and AWS's managed EKS.",
+["K8s architecture: control plane, nodes, etcd","Pods, Deployments, Services, ConfigMaps, Secrets","Ingress controllers & networking","Helm charts: templating and packaging","StatefulSets, PVCs, namespaces, RBAC","Amazon EKS: cluster setup, node groups, Fargate","kubectl mastery + troubleshooting (CrashLoopBackOff, OOMKilled)"],
+["Deploy a stateless and a stateful app on EKS using Helm","Debug a failing pod using only kubectl and logs, no Google"],
+[["Wk1","K8s core objects: Pods, Deployments, Services"],["Wk2","ConfigMaps/Secrets, Ingress, namespaces, RBAC"],["Wk3","Helm charts + StatefulSets + PVCs"],["Wk4","EKS cluster setup, node groups, Fargate, full app deploy"]],
+"Deploy a production-style microservices app on EKS with Helm, Ingress, autoscaling (HPA), and persistent storage.",
+"Treating K8s YAML as magic copy-paste; ignoring resource requests/limits until pods get OOMKilled in prod.",
+"You can stand up an EKS cluster from scratch, deploy via Helm, and self-debug 80% of pod failures.",
+{free:"Kubernetes.io docs, KodeKloud K8s labs (free tier)", paid:"KodeKloud CKA course, Udemy 'EKS Deep Dive'", yt:"TechWorld with Nana K8s course (free, 4hrs)", plat:"Killercoda, AWS EKS Workshop"}
+],
+[
+"06b","AI Engineering + MLOps","3 weeks","Add the AI layer: deploy, monitor, and pipeline generative AI and ML workloads on AWS like a DevOps engineer, not a data scientist.",
+["Generative AI fundamentals: LLMs, embeddings, RAG, fine-tuning vs prompting","Amazon Bedrock: model access, prompt engineering, guardrails","Amazon SageMaker: training jobs, endpoints, pipelines, model registry","Vector databases basics (OpenSearch/Pinecone) for RAG","MLOps concepts: model versioning, drift detection, CI/CD for models (MLOps vs DevOps)","AI-assisted DevOps: using Copilot/Claude/AWS Q to write IaC, debug pipelines, summarize logs","Cost & latency tradeoffs for AI workloads, GPU instance types"],
+["Deploy an LLM-backed API on Bedrock behind API Gateway with guardrails","Stand up a SageMaker pipeline that retrains and redeploys a model automatically"],
+[["Wk1","GenAI fundamentals + Bedrock hands-on + prompt engineering"],["Wk2","SageMaker: training jobs, endpoints, model registry, pipelines"],["Wk3","MLOps CI/CD for models + RAG with a vector DB + AI-assisted pipeline authoring"]],
+"Build a RAG-based internal docs chatbot: S3 docs → embeddings → vector DB → Bedrock LLM → API Gateway, fully IaC'd and CI/CD'd like any other service.",
+"Treating AI services as a black box 'just call the API' instead of understanding cost, latency, and guardrail tradeoffs that DevOps owns in production.",
+"You can deploy, monitor, version, and roll back an AI model or LLM endpoint with the same rigor as any other microservice.",
+{free:"AWS Bedrock docs, SageMaker docs, AWS Skill Builder AI courses", paid:"Udemy 'AWS AI Practitioner & Bedrock'", yt:"freeCodeCamp 'AWS Bedrock & Generative AI'", plat:"AWS Bedrock free tier, SageMaker Studio Lab (free)"}
+],
+[
+"07","CI/CD Professional","3 weeks","Build real, production-style pipelines — not just 'hello world' Jenkins jobs.",
+["Jenkins: pipelines, Jenkinsfile (declarative), agents","GitHub Actions: workflows, matrix builds, reusable actions","AWS CodePipeline + CodeBuild + CodeDeploy","Deployment strategies: blue-green, canary, rolling","ArgoCD & GitOps principles","Pipeline security: secrets management, SAST scanning"],
+["Build a full pipeline: code push → build → test → scan → deploy → notify","Implement a blue-green deployment on AWS without downtime"],
+[["Wk1","Jenkins pipelines + Jenkinsfile + GitHub Actions"],["Wk2","CodePipeline/CodeBuild/CodeDeploy, deployment strategies"],["Wk3","ArgoCD + GitOps for EKS, pipeline security & secrets"]],
+"Build an end-to-end pipeline: GitHub push → Jenkins build/test → Docker build → ECR push → ArgoCD sync to EKS with blue-green rollout.",
+"Hardcoding credentials in pipeline files; no rollback plan when a deploy step fails midway.",
+"A code push triggers a fully automated build, test, scan, and zero-downtime deploy with no manual steps.",
+{free:"Jenkins docs, GitHub Actions docs, ArgoCD docs", paid:"Udemy 'Jenkins Masterclass'", yt:"TechWorld with Nana (Jenkins, ArgoCD, GitOps)", plat:"KodeKloud, AWS free tier CodePipeline"}
+],
+[
+"08","Infrastructure as Code","3 weeks","Provision every piece of cloud infrastructure as versioned, reviewable code.",
+["Terraform: providers, resources, state, variables, modules","Remote state with S3 + DynamoDB locking","Terraform workspaces & environments (dev/stage/prod)","CloudFormation basics & when to choose it over Terraform","Ansible: playbooks, roles, inventory, idempotency","Terraform + Ansible combined workflow"],
+["Write reusable Terraform modules for a VPC + EKS + RDS stack","Use Ansible to configure servers post-provisioning idempotently"],
+[["Wk1","Terraform fundamentals, state, variables"],["Wk2","Terraform modules, remote state, multi-env workspaces"],["Wk3","CloudFormation basics + Ansible playbooks/roles"]],
+"Build a Terraform module library (VPC, EKS, RDS, S3) + Ansible playbooks to configure app servers, with remote state in S3+DynamoDB.",
+"Editing infrastructure manually in the console after it's managed by Terraform — causing permanent state drift.",
+"You can stand up an entire multi-service environment from `terraform apply` with zero console clicks.",
+{free:"Terraform docs (HashiCorp Learn), Ansible docs", paid:"Udemy 'Terraform for AWS' (Zeal Vora)", yt:"TechWorld with Nana (Terraform), LearnCantrill", plat:"Terraform Cloud free tier, AWS free tier"}
+],
+[
+"09","Monitoring + Observability","2 weeks","Move from 'is it down' to 'why is it slow' with full-stack observability.",
+["CloudWatch deep dive: custom metrics, dashboards, alarms","Prometheus: scraping, PromQL basics, exporters","Grafana: dashboards, data sources, alerting","Centralized logging: CloudWatch Logs, ELK/EFK basics","SNS/SQS for alert routing","Incident management basics: on-call, runbooks, postmortems"],
+["Build a Grafana dashboard fed by Prometheus showing real app metrics","Write a runbook + postmortem for a simulated outage"],
+[["Wk1","CloudWatch deep dive + Prometheus setup + PromQL"],["Wk2","Grafana dashboards + centralized logging + incident runbooks"]],
+"Set up Prometheus + Grafana monitoring for the EKS app from Phase 6, with alerting routed through SNS to Slack/email.",
+"Monitoring CPU/memory only and ignoring application-level metrics (latency, error rate, request count).",
+"You can build a dashboard from scratch and explain exactly what 3 metrics you'd page someone on at 3am for.",
+{free:"Prometheus/Grafana docs, CloudWatch docs", paid:"Udemy 'Prometheus & Grafana'", yt:"TechWorld with Nana (Prometheus+Grafana)", plat:"KodeKloud monitoring labs, AWS free tier"}
+],
+[
+"10","Security + DevSecOps","2 weeks","Bake security into every pipeline stage instead of bolting it on at the end.",
+["IAM least-privilege deep dive, SCPs, Organizations","Secrets management: AWS Secrets Manager, SSM Parameter Store","SAST/DAST: SonarQube, Trivy, image scanning","Network security: Security Groups vs NACLs, WAF, Shield basics","Compliance basics: encryption at rest/in transit, GuardDuty"],
+["Integrate SonarQube + Trivy scanning into a CI/CD pipeline with a fail-the-build gate","Rotate a secret using Secrets Manager with zero app downtime"],
+[["Wk1","IAM/Organizations deep dive + Secrets Manager/SSM"],["Wk2","SonarQube/Trivy in pipelines + WAF/GuardDuty + compliance basics"]],
+"Add a security gate to the Phase 7 pipeline: SonarQube code scan + Trivy image scan, pipeline fails on critical vulnerabilities.",
+"Storing secrets as plain environment variables in CI config files committed to Git.",
+"A pipeline you built will refuse to deploy code with a critical vulnerability or exposed secret.",
+{free:"OWASP docs, AWS Security docs, Trivy/SonarQube docs (OSS)", paid:"Udemy 'DevSecOps Bootcamp'", yt:"TechWorld with Nana (DevSecOps)", plat:"SonarCloud free tier, Trivy CLI"}
+],
+[
+"11","Advanced AWS DevOps","3 weeks","Tie every prior phase together into serverless, event-driven, and multi-account patterns.",
+["Lambda + API Gateway: event-driven architectures","EventBridge: scheduled & event-pattern rules","SNS/SQS advanced patterns: fan-out, DLQs","Systems Manager: Session Manager, Patch Manager, Automation","Organizations + multi-account strategy, Control Tower basics","ECS vs EKS: when to choose which"],
+["Build a fully serverless event-driven pipeline (S3 → Lambda → DynamoDB → SNS)","Design a multi-account AWS Organization structure for a fictional company"],
+[["Wk1","Lambda + API Gateway + EventBridge"],["Wk2","SNS/SQS advanced + Systems Manager"],["Wk3","Organizations/multi-account + ECS vs EKS decision framework"]],
+"Build a serverless image-processing pipeline: S3 upload → Lambda resize → DynamoDB metadata → SNS notification, fully IaC'd.",
+"Treating Lambda as a tiny EC2 instance instead of designing for statelessness and cold starts.",
+"You can defend, in an interview, exactly when you'd choose Lambda vs ECS vs EKS for a given workload.",
+{free:"AWS Lambda docs, Serverless Land", paid:"LearnCantrill DevOps Pro course", yt:"freeCodeCamp AWS Lambda crash course", plat:"AWS free tier, Serverless Framework"}
+],
+[
+"12","Real-world Projects","4 weeks","Convert every skill learned so far into 6 production-grade portfolio capstones (including the LLMOps platform) (see Projects section).",
+["Architecture design before coding: diagram first, build second","Full IaC + CI/CD + monitoring + security per project","Cost-aware design (right-sizing, S3 lifecycle, spot instances)","Writing professional READMEs and architecture decision records (ADRs)"],
+["Ship a project that survives someone else cloning the repo and deploying it with only your README"],
+[["Wk1","Capstone 1: 3-tier app on EKS, full CI/CD"],["Wk2","Capstone 2: Serverless data pipeline"],["Wk3","Capstone 3: Multi-environment Terraform platform"],["Wk4","Capstones 4-5: Observability stack + DevSecOps pipeline"]],
+"6 production-level capstones — full list and architecture in the Projects section below.",
+"Building projects nobody can run except you because setup steps live only in your head.",
+"Each capstone has a working README a stranger could follow start to finish.",
+{free:"GitHub, your own AWS free tier account", paid:"—", yt:"—", plat:"GitHub Pages for docs, AWS"}
+],
+[
+"13","Interview Preparation","2 weeks (parallel)","Convert technical skill into confident, structured interview performance.",
+["STAR method for behavioral questions","Whiteboard/verbal system design practice","Common DevOps interview question banks (Linux, AWS, K8s, CI/CD)","Mock interview practice and feedback loops"],
+["Answer any of the 8 core question categories (see Interview section) without notes"],
+[["Wk1","Build question bank answers + record yourself"],["Wk2","2 peer mocks + 1 system design mock"]],
+"Build a personal 'interview answer bank' Notion doc with 40+ rehearsed answers tied to your real projects.",
+"Memorizing answers word-for-word instead of understanding the underlying reasoning — falls apart under follow-ups.",
+"You can do a 45-minute mock technical interview without long silences or 'I don't know' on fundamentals.",
+{free:"Pramp, Glassdoor interview questions, roadmap.sh", paid:"interviewing.io", yt:"TechWorld with Nana interview series", plat:"Pramp, community Discord mock groups"}
+],
+[
+"14","Certification Preparation","Interleaved","Pass the right certs at the right time — see full Certification Ladder section.",
+["Exam-specific practice tests","Whitepaper/FAQ review per service","Time-boxed exam strategy (flag & return, elimination)"],
+["Score 85%+ consistently on practice exams before booking the real one"],
+[["Ongoing","Practice tests integrated into each relevant phase's Sunday revision"]],
+"See Certifications section — each exam booked only after its hands-on phase is complete.",
+"Booking an exam before doing the hands-on labs — passes the test, fails the job.",
+"Consistent 85%+ on 2 separate full-length practice exams.",
+{free:"AWS Skill Builder, AWS exam guides", paid:"Tutorials Dojo practice exams, Udemy practice tests", yt:"freeCodeCamp exam prep", plat:"AWS Skill Builder, Tutorials Dojo"}
+],
+[
+"15","Job Search Strategy","8–12 weeks","Execute the full job-search system — see Job Search section for the complete playbook.",
+["Resume + LinkedIn + GitHub + portfolio site, all ATS- and recruiter-ready","Targeted applications + direct outreach","Offer negotiation basics"],
+["Land 3+ first-round interviews per 2 weeks of consistent outreach"],
+[["Wk1-2","Resume/LinkedIn/portfolio polish + first application batch"],["Wk3-8","Daily applications + outreach + interview loop"],["Wk9-12","Negotiation + offer comparison + onboarding prep"]],
+"Your job search itself, tracked in the Job Tracker below.",
+"Applying with a one-size-fits-all resume to every posting instead of tailoring keywords per JD.",
+"Signed offer letter that matches or exceeds the salary roadmap for your level.",
+{free:"LinkedIn, AngelList/Wellfound, company career pages", paid:"LinkedIn Premium (optional)", yt:"—", plat:"LinkedIn, Naukri, AngelList"}
+]
+];
+
+/* ---- pipeline rail ---- */
+const rail = document.getElementById('pipelineRail');
+phases.forEach((p,i)=>{
+  if(i>0){
+    const line = document.createElement('div');
+    line.className='pipe-line';
+    rail.appendChild(line);
+  }
+  const row = document.createElement('div');
+  row.className='pipe-row';
+  const stage = document.createElement('div');
+  stage.className='pipe-stage'+(i===0?' active':'');
+  stage.dataset.idx=i;
+  stage.innerHTML = `<div class="node">${p[0]}</div><div class="lbl">${p[1]}</div><div class="dur">${p[2]}</div>`;
+  stage.onclick=()=>renderPhase(i);
+  row.appendChild(stage);
+  rail.appendChild(row);
+});
+
+function renderPhase(i){
+  document.querySelectorAll('.pipe-stage').forEach(s=>s.classList.toggle('active', +s.dataset.idx===i));
+  const p = phases[i];
+  const mount = document.getElementById('phaseDetailMount');
+  mount.innerHTML = `
+    <div class="phase-detail-top">
+      <div><h3>Phase ${p[0]} — ${p[1]}</h3><div class="obj">${p[3]}</div></div>
+      <div class="badge">⧗ ${p[2]}</div>
+    </div>
+    <div class="phase-grid">
+      <div class="phase-col">
+        <h4>Topics in order</h4>
+        <ul>${p[4].map(t=>`<li>${t}</li>`).join('')}</ul>
+        <h4 style="margin-top:20px;">What to master</h4>
+        <ul>${p[5].map(t=>`<li>${t}</li>`).join('')}</ul>
+      </div>
+      <div class="phase-col">
+        <h4>Daily / weekly breakdown</h4>
+        <div class="day-split" style="flex-direction:column;">
+          ${p[6].map(d=>`<div class="day-pill"><b>${d[0]}</b>${d[1]}</div>`).join('')}
+        </div>
+        <h4 style="margin-top:18px;">Mini-project</h4>
+        <p style="font-size:13.5px; color:var(--text-dim);">${p[7]}</p>
+        <div class="mistake-box"><strong>Common mistake:</strong> ${p[8]}</div>
+        <div class="exit-box"><strong>Exit criteria:</strong> ${p[9]}</div>
+      </div>
+    </div>
+    <div class="phase-full-bottom">
+      <div class="res-group"><b>Free</b><span>${p[10].free}</span></div>
+      <div class="res-group"><b>Paid</b><span>${p[10].paid}</span></div>
+      <div class="res-group"><b>YouTube</b><span>${p[10].yt}</span></div>
+      <div class="res-group"><b>Platforms</b><span>${p[10].plat}</span></div>
+    </div>
+  `;
+}
+renderPhase(0);
+
+/* ---- chips ---- */
+const awsServices = ["IAM","EC2","VPC","Route53","S3","CloudFront","ELB","Auto Scaling","RDS","DynamoDB","Lambda","API Gateway","CloudWatch","SNS","SQS","EventBridge","Systems Manager","ECR","ECS","EKS","CloudFormation","Terraform","CodePipeline","CodeBuild","CodeDeploy","Organizations","Cost Explorer"];
+const aiServices = ["Amazon Bedrock","SageMaker","SageMaker Pipelines","Bedrock Guardrails","Bedrock Agents","AWS Q Developer","Comprehend","Textract","Rekognition","OpenSearch (vector search)","Model Registry","GenAI prompt engineering","RAG architecture","LLMOps / CI-CD for models","GitHub Copilot"];
+const devopsTools = ["Linux","Shell scripting","Python","Git","GitHub","Jenkins","Docker","Kubernetes","Helm","Terraform","Ansible","ArgoCD","Prometheus","Grafana","SonarQube","Nexus","Nginx","Monitoring","Logging","Incident management"];
+document.getElementById('awsChips').innerHTML = awsServices.map(s=>`<div class="chip">${s}</div>`).join('');
+document.getElementById('aiChips').innerHTML = aiServices.map(s=>`<div class="chip">${s}</div>`).join('');
+document.getElementById('devopsChips').innerHTML = devopsTools.map(s=>`<div class="chip">${s}</div>`).join('');
+
+/* ---- projects (all free-tier safe) ---- */
+const projects = {
+  beginner:[
+    ["Static portfolio site on S3 + CloudFront","S3, Route53(opt), CloudFront, ACM","S3 static hosting, CDN, DNS, HTTPS","2 days","S3 5GB + CloudFront 1TB/50k req free 12mo. Skip Route53 ($0.50/zone) — use the free *.cloudfront.net URL."],
+    ["EC2 LAMP/LEMP stack server","EC2 t2.micro/t3.micro, SG, EBS","Linux admin, web server config, SSH hardening","2 days","750 hrs/mo t2.micro free 12mo + 30GB EBS free. Stop instance when not in use."],
+    ["Auto-stop dev EC2 instances script","EC2, Lambda, EventBridge","boto3, cost optimization, scheduling","2 days","Lambda 1M req/mo always-free + EventBridge free. This project literally protects your free tier."],
+    ["S3 bucket lifecycle & backup automation","S3, IAM, CloudWatch","Lifecycle policies, versioning, cost control","1 day","Stay under 5GB S3 + 10 CloudWatch alarms free 12mo. Set objects to expire after 1 day in labs."],
+    ["Simple VPC with public-subnet-only app (no NAT)","VPC, IGW, Route Tables, EC2","Networking, subnetting, routing","2 days","VPC/IGW/route tables are always free. Skip NAT Gateway (~$0.045/hr) entirely — use a public subnet for this lab."],
+    ["Dockerized to-do app","Docker (local), ECR","Dockerfile, image build, container networking","2 days","Run Docker Desktop locally (free) for builds; ECR free tier = 500MB-mo private storage 12mo."],
+    ["Jenkins 'hello world' CI pipeline","EC2 t2.micro (Jenkins host)","Pipeline basics, build triggers","2 days","One t2.micro inside the 750 free hrs/mo pool. Stop the instance after each session."],
+    ["Bash server health-check + email alert","SNS, CloudWatch","Shell scripting, monitoring basics","1 day","SNS 1,000 email notifications/mo always-free. Zero cost risk."],
+    ["IAM policy simulator practice set","IAM","Least privilege, policy JSON syntax","1 day","IAM is 100% free, always, no limit. Zero-cost lab."],
+    ["Terraform 'hello VPC' single resource","VPC, Terraform (local)","IaC basics, state file concept","2 days","VPC resources are free; run Terraform from your laptop, no remote backend needed yet."],
+    ["Bedrock 'hello LLM' prompt playground script","Bedrock (on-demand)","Prompt engineering basics, boto3 + Bedrock API","1 day","Bedrock has no free tier — use the cheapest model (e.g. Claude Haiku / Titan Lite) and cap to ~20 short prompts; budget under $1."]
+  ],
+  intermediate:[
+    ["3-tier web app, single-AZ, no Multi-AZ RDS","EC2 t2.micro, ALB, RDS db.t3.micro (single-AZ)","HA concepts taught, single-AZ for cost","5 days","ALB: 750 hrs/mo free 12mo. RDS db.t3.micro single-AZ + 20GB: free 12mo. Avoid Multi-AZ (2x cost) — discuss it conceptually instead."],
+    ["CI/CD pipeline: GitHub → Jenkins → ECR → EC2","Jenkins (EC2 t2.micro), ECR, EC2, CodeDeploy","Full CI/CD, deployment automation","5 days","CodeDeploy to EC2 is free (you pay only for EC2 hours, already in free tier)."],
+    ["Containerized microservices with Docker Compose","Docker (local), ECR, RDS free tier","Multi-container orchestration, networking","4 days","Run Compose locally; push final images to ECR free tier only when needed for the next project."],
+    ["Serverless URL shortener","Lambda, API Gateway, DynamoDB","Serverless architecture, NoSQL design","4 days","Lambda 1M req + API Gateway 1M calls (12mo) + DynamoDB 25GB — all always-free or 12mo-free. Near-zero cost."],
+    ["k3s/kind cluster on a free-tier EC2 (EKS-equivalent)","EC2 t3.micro/t3.small, ECR, Helm","Kubernetes fundamentals, Helm charts","6 days","Real EKS control plane costs $0.10/hr with NO free tier — use k3s or kind on a single free-tier EC2 instead to learn 95% of the same kubectl/Helm skills for $0."],
+    ["Terraform multi-environment VPC module","Terraform (local), S3 backend (small)","Modules, remote state, environments","5 days","S3 state file is a few KB — well within 5GB free tier. No DynamoDB lock table needed for solo labs."],
+    ["Centralized logging with CloudWatch + SNS alerts","CloudWatch Logs, SNS, Lambda","Log aggregation, alerting pipelines","4 days","CloudWatch: 5GB log ingestion + 10 alarms free 12mo. Set log retention to 1–3 days in labs to stay under quota."],
+    ["Blue-green deployment on EC2","CodeDeploy, ALB, EC2 t2.micro","Zero-downtime deployment strategy","4 days","Use 2 t2.micro instances briefly during cutover, well within 750 free hrs/mo if you stop them after."],
+    ["Ansible-configured app server fleet","EC2 t2.micro x2, SSM, Ansible (local)","Configuration management, idempotency","4 days","Ansible runs free from your laptop; only the 2 target EC2 instances count against free-tier hours."],
+    ["Prometheus + Grafana monitoring stack","EC2 t3.micro, CloudWatch","Observability, dashboarding, PromQL","5 days","Self-host Prometheus+Grafana on one free-tier EC2 instead of a managed service — $0 beyond compute hours."],
+    ["RAG chatbot using a local/free vector index","Bedrock (on-demand), S3, Lambda, API Gateway, FAISS/Chroma (self-hosted, not managed OpenSearch)","RAG architecture, vector search, prompt engineering","5 days","Skip managed Amazon OpenSearch (no free tier, $24+/mo minimum) — run FAISS or Chroma inside Lambda/EC2 for $0 vector storage; only Bedrock calls cost a few cents."]
+  ],
+  advanced:[
+    ["k3s platform with ArgoCD GitOps (EKS-equivalent)","EC2 t3.small, ArgoCD, ECR, Helm","GitOps, declarative deployments, autoscaling","8 days","Same k3s-on-EC2 substitution as the intermediate project — avoids the $0.10/hr EKS control plane fee entirely."],
+    ["Multi-account AWS Organization (no Control Tower)","Organizations, SCPs","Governance, multi-account security","6 days","AWS Organizations and SCPs are free. Skip Control Tower's guardrail stack if it provisions paid resources (CloudTrail/Config) in every account — enable only in the management account."],
+    ["Full DevSecOps pipeline with SonarQube + Trivy gates","CodePipeline (free tier), ECR, Lambda, EC2 (SonarQube host)","Security scanning, pipeline gating","6 days","CodePipeline: 1 free active pipeline/mo for first year. Self-host SonarQube Community Edition on a free-tier EC2 instead of SonarCloud paid tiers."],
+    ["Event-driven data pipeline (S3→Lambda→DynamoDB→SNS)","Lambda, EventBridge, SQS, DynamoDB","Event-driven design, DLQs, fan-out","6 days","SQS 1M requests/mo always-free + Lambda/DynamoDB free tiers. Entire pipeline can run at $0."],
+    ["DR design doc + single-region failover simulation","Route53(opt), RDS single-AZ snapshot/restore, S3 (skip Cross-Region Replication)","DR strategy, RTO/RPO, failover automation","7 days","Real Multi-Region + S3 CRR incurs transfer costs — simulate failover with snapshot/restore in one region and document the multi-region design on paper instead of deploying it live."],
+    ["Terraform module registry for company-wide reuse","Terraform (local), S3 (small state)","Module design, versioning, team workflows","6 days","Public/private module registry can be simulated with a GitHub repo + local S3 backend — no paid Terraform Cloud needed."],
+    ["Cost optimization audit + automated rightsizing","Cost Explorer, Lambda, Trusted Advisor (basic checks)","FinOps, automation, reporting","5 days","Cost Explorer and the free Trusted Advisor core checks cost nothing — this project literally trains you to protect your free tier."],
+    ["Self-hosted Nexus + SonarQube on a single free-tier EC2","EC2 t3.small, EBS","Artifact management, internal tooling basics","6 days","Run both tools as Docker containers on ONE t3.small (just outside true free tier — use ~20–30 hrs only, well under a few cents) instead of a costly EKS-hosted setup."],
+    ["Canary deployment pipeline with automated rollback","CodeDeploy, CloudWatch Alarms, Lambda","Progressive delivery, automated rollback logic","6 days","All components are within always-free or 12mo-free limits; uses the same EC2 instances from earlier labs."],
+    ["Incident response simulation + postmortem automation","CloudWatch, SNS, Lambda, EventBridge","Incident management, runbook automation","5 days","Purely event-driven — stays inside Lambda/SNS/EventBridge always-free tiers."],
+    ["MLOps mini-pipeline: SageMaker train → register → deploy (smallest instance)","SageMaker (ml.t3.medium, free tier eligible 2 months), ECR, EventBridge, Lambda","Model CI/CD, drift detection, model registry","7 days","SageMaker gives 250 hrs/mo of ml.t3.medium notebook + some training hours free for the FIRST 2 MONTHS only — batch this project early and tear the endpoint down immediately after demoing it (real-time endpoints are NOT free)."]
+  ],
+  production:[
+    ["End-to-end platform: k3s + RDS + CI/CD + monitoring","EC2 t3.small (k3s), RDS single-AZ, ALB, ArgoCD, self-hosted Prometheus/Grafana","Full-stack production architecture, security, observability","3 weeks","Substituting k3s for EKS and self-hosting Prometheus/Grafana keeps this capstone almost entirely inside free-tier EC2/RDS/ALB hours — budget a few dollars for any overage."],
+    ["Serverless e-commerce backend at scale","Lambda, API Gateway, DynamoDB, SQS, SNS, CloudFront","Serverless scale patterns, event-driven design, caching","2.5 weeks","Every service here has a generous always-free or 12mo-free tier — load-test gently (a few hundred requests, not load-test tools generating millions) to stay inside quotas."],
+    ["Multi-environment IaC platform (dev/stage/prod)","Terraform (local), S3 (small state), k3s-on-EC2, RDS single-AZ","Enterprise IaC patterns, environment promotion","2.5 weeks","Run all 3 'environments' as separate small EC2/RDS resources you destroy nightly with `terraform destroy` — never leave 3 environments running 24/7."],
+    ["Centralized DevSecOps platform for multiple teams","CodePipeline (1 free/mo), self-hosted SonarQube/Trivy, ECR, Organizations","Platform engineering, security-as-a-service, governance","3 weeks","Self-host the scanning tools on one EC2 instance shared across 'teams' rather than provisioning separate paid infrastructure per team."],
+    ["Observability-as-a-product: logs, metrics, traces, alerts","CloudWatch (free tier), self-hosted Prometheus/Grafana, SNS","Full observability stack, distributed tracing, SLOs","2.5 weeks","Skip AWS X-Ray's paid tier beyond 100k traces/mo and Managed Grafana's paid plan — self-host Grafana on free-tier EC2 instead."],
+    ["LLMOps mini-platform: single-model gateway + guardrails","Bedrock (on-demand, smallest model), API Gateway, Lambda, self-hosted vector store (FAISS/Chroma), CloudWatch","LLMOps fundamentals, guardrails, cost/latency tradeoffs, basic A/B testing","3 weeks","Scope to ONE Bedrock model (e.g. Claude Haiku) and a self-hosted vector store instead of managed OpenSearch + multiple models — total Bedrock spend for the whole capstone should stay under $5."]
+  ]
+};
+const tierMeta = [["beginner","Beginner · 11"],["intermediate","Intermediate · 11"],["advanced","Advanced · 11"],["production","Production · 6"]];
+document.getElementById('tierTabs').innerHTML = tierMeta.map((t,i)=>`<div class="tier-tab${i===0?' active':''}" data-tier="${t[0]}">${t[1]}</div>`).join('');
+const panelsMount = document.getElementById('tierPanels');
+panelsMount.innerHTML = tierMeta.map((t,i)=>`
+  <div class="tier-panel${i===0?' active':''}" data-panel="${t[0]}">
+    <table class="proj-table">
+      <tr><th>Project</th><th>AWS Services</th><th>Skills covered</th><th>Time</th><th>Free-tier notes</th></tr>
+      ${projects[t[0]].map(p=>`<tr><td class="pname">${p[0]}</td><td class="svc">${p[1]}</td><td>${p[2]}</td><td>${p[3]}</td><td style="color:var(--green); font-size:12px;">${p[4]}</td></tr>`).join('')}
+    </table>
+  </div>
+`).join('');
+document.querySelectorAll('.tier-tab').forEach(tab=>{
+  tab.onclick=()=>{
+    document.querySelectorAll('.tier-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tier-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelector(`.tier-panel[data-panel="${tab.dataset.tier}"]`).classList.add('active');
+  };
+});
+
+/* ---- certifications ---- */
+const certs = [
+  ["1","AWS Certified Cloud Practitioner","Optional · 2 weeks · after Phase 0–3 start",
+   "A broad, non-technical primer on AWS billing, support plans, and core services. Skip it only if you're confident and time-pressed — most freshers benefit from the easy early win.",
+   ["Study plan: AWS Skill Builder + 1 practice test set","Exam strategy: eliminate 2 wrong answers first, flag scenario questions","Practice: Tutorials Dojo CLF-C02 set","Readiness: 80%+ on 2 full practice exams"]],
+  ["2","AWS Certified AI Practitioner","Foundational AI · 2 weeks · after Phase 6b",
+   "Validates Bedrock, SageMaker, and responsible-AI fundamentals — the credential that signals you're not just a DevOps engineer, but one who ships AI workloads safely.",
+   ["Study plan: AWS Skill Builder AI Practitioner path + Bedrock/SageMaker hands-on from Phase 6b","Exam strategy: focus on responsible-AI and service-selection questions (Bedrock vs SageMaker vs Comprehend)","Practice: Tutorials Dojo AIF-C01 set","Readiness: 80%+ on 2 full practice exams"]],
+  ["3","AWS Certified Solutions Architect – Associate","Core · 5 weeks · after Phase 3",
+   "The single highest-leverage cert for an AI+DevOps-track fresher — validates everything from Phase 3 (VPC, EC2, S3, ELB, RDS, IAM).",
+   ["Study plan: LearnCantrill SAA-C03 course + hands-on labs replicating every diagram","Exam strategy: time-box to 90s/question, return to flagged scenario questions last","Practice: Tutorials Dojo SAA-C03 (6 full tests)","Readiness: 85%+ across all 6 Tutorials Dojo tests"]],
+  ["4","AWS Certified Developer – Associate","After Phase 11 · 3 weeks",
+   "Validates Lambda, API Gateway, DynamoDB, and CI/CD-adjacent dev services — pairs naturally with the serverless and AI-integration work in Phase 11.",
+   ["Study plan: Udemy Developer Associate course + SDK/boto3 practice","Exam strategy: watch for CLI vs SDK vs Console nuance questions","Practice: Tutorials Dojo DVA-C02 set","Readiness: 85%+ on 2 full practice exams"]],
+  ["5","AWS Certified SysOps Administrator – Associate","After Phase 9–10 · 3 weeks",
+   "The most hands-on associate exam — heavy on CloudWatch, Systems Manager, troubleshooting, and security; ideal once Phases 9–10 are done.",
+   ["Study plan: hands-on labs first, theory second — this exam rewards muscle memory","Exam strategy: lab-simulation questions need console fluency, not memorization","Practice: Tutorials Dojo SOA-C02 set","Readiness: comfortable troubleshooting live in the console under time pressure"]],
+  ["6","AWS Certified DevOps Engineer – Professional","Capstone · 6 weeks · after Phase 12",
+   "The professional-level capstone exam — CI/CD, IaC, monitoring, and high availability at depth. Sit this only after your 6 production capstones (including the LLMOps platform) exist.",
+   ["Study plan: LearnCantrill DevOps Pro + rebuild every pipeline pattern from memory","Exam strategy: long scenario questions — read the LAST sentence of the question first","Practice: Tutorials Dojo DOP-C02 set (hardest practice tests in the ladder)","Readiness: 80%+ AND you can defend every project in the Phase 12 portfolio, including the AI ones, in an interview"]]
+];
+document.getElementById('certMount').innerHTML = certs.map(c=>`
+  <div class="cert-card">
+    <div class="cert-num">${c[0]}</div>
+    <div class="cert-body">
+      <h4>${c[1]}</h4>
+      <div class="meta">${c[2]}</div>
+      <p>${c[3]}</p>
+      <div class="cert-checklist">${c[4].map(i=>`<span>${i}</span>`).join('')}</div>
+    </div>
+  </div>
+`).join('');
+
+/* ---- calendar ---- */
+const cal = [
+  ["Month 1","Foundation, Linux, Networking, Git","Phases 0–1 complete, comfortable on the command line"],
+  ["Month 2","Python automation + AWS Core begins","First boto3 scripts, IAM/EC2/VPC mastered"],
+  ["Month 3","AWS Core finishes, DevOps Fundamentals, Docker","3-tier app live on AWS, first containers shipped"],
+  ["Month 4","Kubernetes + EKS deep dive","First EKS cluster running a Helm-deployed app"],
+  ["Month 5","AI Engineering + MLOps (Bedrock, SageMaker, RAG)","RAG chatbot shipped, AI Practitioner cert booked/passed"],
+  ["Month 6","CI/CD Professional + IaC begins","Full pipeline live: push → build → deploy automatically"],
+  ["Month 7","IaC finishes, Monitoring, Security/DevSecOps","Entire stack provisioned by Terraform with scan gates"],
+  ["Month 8","Advanced AWS DevOps (serverless, multi-account)","Serverless pipeline shipped, SAA cert booked/passed"],
+  ["Month 9","Real-world Projects (capstones 1–3)","3 of 6 production capstones live on GitHub, incl. LLMOps platform"],
+  ["Month 10","Capstones 4–6 + Interview Prep starts","All 6 capstones complete, mock interviews underway"],
+  ["Month 11","Certification push + resume/LinkedIn polish","3–4 certs passed, portfolio site live"],
+  ["Month 12","Full job search execution","Daily applications, interview loop, offer negotiation"]
+];
+document.getElementById('calMount').innerHTML = cal.map(c=>`
+  <div class="cal-cell"><div class="m">${c[0]}</div><h5>${c[1]}</h5><p>${c[2]}</p></div>
+`).join('');
+
+/* ---- trackers ---- */
+const trackerSets = {
+  "Phase tracker": phases.map(p=>`Phase ${p[0]} — ${p[1]}`),
+  "Certification tracker": certs.map(c=>c[1]),
+  "Skill tracker": ["Linux & shell scripting","Python + boto3","AWS networking (VPC)","Docker","Kubernetes / EKS","Bedrock / SageMaker / RAG","CI/CD pipelines","Terraform / IaC","Monitoring & observability","Security / DevSecOps"],
+  "Project tracker": ["5/10 beginner projects shipped","6/11 intermediate projects shipped","6/11 advanced projects shipped","6/6 production capstones shipped"],
+  "Interview tracker": ["Question bank built (40+ answers, incl. AI/MLOps)","2 peer mock interviews done","1 system design mock done","Resume reviewed by 2+ people"],
+  "Job search tracker": ["Resume + LinkedIn + GitHub polished","Portfolio site deployed","10 applications/week sustained","First interview scheduled","Offer received"]
+};
+const trackerMount = document.getElementById('trackerMount');
+Object.entries(trackerSets).forEach(([name, items])=>{
+  const box = document.createElement('div');
+  box.className='tracker-box';
+  box.innerHTML = `<h4>${name}</h4>` +
+    items.map((it,i)=>`<label class="track-item" data-box="${name}"><input type="checkbox"><span>${it}</span></label>`).join('') +
+    `<div class="progress-bar"><div class="progress-fill"></div></div><div class="progress-label">0 / ${items.length} complete</div>`;
+  trackerMount.appendChild(box);
+});
+trackerMount.addEventListener('change', (e)=>{
+  if(e.target.tagName==='INPUT'){
+    const box = e.target.closest('.tracker-box');
+    const label = e.target.closest('.track-item');
+    label.classList.toggle('done', e.target.checked);
+    const total = box.querySelectorAll('input').length;
+    const done = box.querySelectorAll('input:checked').length;
+    box.querySelector('.progress-fill').style.width = (done/total*100)+'%';
+    box.querySelector('.progress-label').textContent = `${done} / ${total} complete`;
+  }
+});
+
+/* ---- nav active state on scroll ---- */
+const navLinks = document.querySelectorAll('#mainnav a');
+const sections = [...navLinks].map(l=>document.querySelector(l.getAttribute('href')));
+window.addEventListener('scroll', ()=>{
+  let idx = 0;
+  sections.forEach((s,i)=>{ if(s && s.getBoundingClientRect().top < 120) idx = i; });
+  navLinks.forEach((l,i)=>l.classList.toggle('active', i===idx));
+}, {passive:true});
+</script>
+</body>
+</html>
